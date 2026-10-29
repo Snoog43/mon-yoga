@@ -1,0 +1,896 @@
+<!doctype html>
+<html lang="fr">
+<head><link rel="icon" href="icon.svg">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>Mon Yoga</title>
+<style>
+:root{--bg:#F4EFE6;--card:#FFFDF8;--ink:#2E2A25;--mut:#7A7065;--line:#E6DED1;--acc:#4F8068;--acc-ink:#fff;--soft:#E6EFE9;--fig:#38483F;--fig2:#AEBDB4;--shadow:0 1px 2px rgba(60,40,20,.06),0 6px 18px rgba(60,40,20,.07)}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#171715;--card:#22211E;--ink:#EEE7DC;--mut:#A0978A;--line:#34322C;--acc:#7DB095;--acc-ink:#10140F;--soft:#24302A;--fig:#D9E6DE;--fig2:#5C6B63;--shadow:none}}
+:root[data-theme=dark]{--bg:#171715;--card:#22211E;--ink:#EEE7DC;--mut:#A0978A;--line:#34322C;--acc:#7DB095;--acc-ink:#10140F;--soft:#24302A;--fig:#D9E6DE;--fig2:#5C6B63;--shadow:none}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink)}
+body{font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-user-select:none;user-select:none;overscroll-behavior:none}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+h1,h2,h3{margin:0;font-weight:650;letter-spacing:-.01em}
+.view{display:none;max-width:560px;margin:0 auto;padding:18px 16px 40px;min-height:100vh}
+.view.on{display:block}
+.muted{color:var(--mut)}
+.row{display:flex;align-items:center;gap:10px}
+.sp{flex:1}
+.iconbtn{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--card);box-shadow:var(--shadow);border:1px solid var(--line)}
+.iconbtn svg{width:22px;height:22px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}
+/* accueil */
+.hello{font-size:28px;margin:6px 0 2px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}
+.stat{padding:12px;text-align:center}
+.stat b{display:block;font-size:22px}
+.stat span{font-size:12.5px;color:var(--mut)}
+.suggest{display:flex;align-items:center;gap:14px;padding:16px;margin-bottom:22px;width:100%;text-align:left;color:#fff;border:0}
+.suggest .em{font-size:34px}
+.suggest small{opacity:.9;display:block}
+.sect{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--mut);margin:20px 2px 10px;font-weight:600}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.prog{padding:14px;text-align:left;display:flex;flex-direction:column;gap:6px;min-height:150px;position:relative;overflow:hidden}
+.prog .em{font-size:28px;width:46px;height:46px;border-radius:14px;display:grid;place-items:center}
+.prog h3{font-size:16px;line-height:1.2}
+.prog .meta{font-size:12.5px;color:var(--mut);margin-top:auto}
+.hist{padding:4px 14px}
+.hist div{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line);font-size:14.5px}
+.hist div:last-child{border:0}
+/* détail */
+.hero{border-radius:22px;padding:20px;color:#fff;margin:14px 0 16px}
+.hero .em{font-size:40px}
+.hero h1{font-size:26px;margin-top:6px}
+.hero p{margin:8px 0 0;opacity:.95}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.chip{background:rgba(255,255,255,.22);padding:4px 10px;border-radius:99px;font-size:13px}
+.opt{padding:14px 16px;margin-bottom:12px}
+.opt label{font-size:13px;color:var(--mut);display:block;margin-bottom:8px}
+.seg{display:flex;background:var(--bg);border-radius:12px;padding:3px;gap:3px}
+.seg button{flex:1;padding:8px 4px;border-radius:9px;font-size:14px;color:var(--mut)}
+.seg button.on{background:var(--card);color:var(--ink);box-shadow:var(--shadow);font-weight:600}
+.toggles{display:flex;gap:10px}
+.tg{flex:1;padding:10px;border-radius:12px;border:1px solid var(--line);background:var(--bg);font-size:14px;color:var(--mut)}
+.tg.on{background:var(--soft);border-color:var(--acc);color:var(--ink);font-weight:600}
+.steps{padding:4px 0}
+.st{display:flex;align-items:center;gap:12px;padding:8px 14px;width:100%;text-align:left;border-bottom:1px solid var(--line)}
+.st:last-child{border:0}
+.st .mini{width:52px;height:50px;flex:none;background:var(--bg);border-radius:12px;padding:3px}
+.st .mini svg{width:100%;height:100%}
+.st .nm{flex:1;font-size:15px;line-height:1.25}
+.st .nm small{display:block;color:var(--mut);font-size:12.5px}
+.st .t{font-size:13.5px;color:var(--mut);font-variant-numeric:tabular-nums}
+.st.stb{flex-wrap:wrap}
+.bb{flex-basis:100%;padding:4px 0 2px 64px;font-size:14px}
+.bb .cy{padding:4px 0;font-size:14px}
+.bb .rep,.bb .how{color:var(--mut);font-size:13.5px;margin-top:6px}
+.bb .how p{margin:3px 0}
+.go{position:sticky;bottom:14px;width:100%;margin-top:18px;padding:16px;border-radius:16px;background:var(--acc);color:var(--acc-ink);font-weight:650;font-size:17px;box-shadow:0 8px 24px rgba(40,80,60,.3)}
+/* figure */
+.fig{display:block;width:100%;height:100%}
+.fig path{fill:none;stroke-linecap:round;stroke-linejoin:round}
+.fig .far{stroke:var(--fig2);stroke-width:4.6}
+.fig .near{stroke:var(--fig);stroke-width:4.6}
+.fig .body{stroke:var(--fig);stroke-width:5.6}
+.fig .head{fill:var(--fig)}
+.fig .gnd{stroke:var(--line);stroke-width:2.2;stroke-linecap:round}
+/* lecteur */
+#player.on{display:flex}
+#player{flex-direction:column;height:100vh;height:100dvh;min-height:0;padding:12px 16px 14px;overflow:hidden}
+.pl-top{display:flex;align-items:center;gap:12px}
+.bar{height:6px;border-radius:9px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--acc);border-radius:9px;transition:width .3s linear}
+.pl-prog{flex:1}
+.pl-prog small{display:flex;justify-content:space-between;font-size:12.5px;color:var(--mut);margin-top:5px;font-variant-numeric:tabular-nums}
+.pl-stage{flex:1 1 0;min-height:0;display:flex;align-items:center;justify-content:center;margin:8px 0;position:relative;overflow:hidden}
+.pl-stage .figwrap{width:min(100%,380px);height:100%;max-height:300px}
+.pl-stage .figwrap svg{width:100%;height:100%}
+.breath{position:relative;height:100%;max-height:260px;max-width:80vw;aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.breath .bc{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 40% 35%,var(--soft),var(--acc));opacity:.85;transform:scale(.42)}
+.breath .ring{position:absolute;inset:0;border-radius:50%;border:2px dashed var(--line)}
+.breath .bl{position:relative;font-size:clamp(14px,2.6vh,20px);font-weight:650;text-align:center;padding:0 10px}
+.breath .bn{position:relative;font-size:clamp(24px,5vh,38px);font-weight:300;line-height:1.1;margin-top:4px;font-variant-numeric:tabular-nums}
+.pl-info{text-align:center}
+.pl-tag{display:inline-block;font-size:12.5px;font-weight:600;padding:3px 10px;border-radius:99px;background:var(--soft);color:var(--ink);min-height:22px}
+.pl-tag:empty{visibility:hidden}
+.pl-info h2{font-size:25px;margin:6px 0 0}
+.pl-sk{color:var(--mut);font-style:italic;font-size:14px;min-height:20px}
+.pl-time{font-size:clamp(34px,7vh,52px);font-weight:300;text-align:center;font-variant-numeric:tabular-nums;line-height:1.1;margin:6px 0 4px}
+.pl-cues{margin:10px 0 0;padding:12px 14px 12px 32px;font-size:15px;max-height:26vh;overflow:auto;flex:none}
+.pl-top,.pl-info,.pl-time,#player>.bar,.pl-next,.pl-ctrl{flex:none}
+.pl-cues li{margin:3px 0}
+.pl-cues.flow{list-style:none;padding:14px;text-align:center;font-size:19px;font-weight:600}
+.pl-next{font-size:13.5px;color:var(--mut);text-align:center;margin:10px 0 4px;min-height:20px}
+.pl-ctrl{display:flex;justify-content:center;align-items:center;gap:26px;margin-top:6px}
+.pl-ctrl button{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:var(--card);border:1px solid var(--line)}
+.pl-ctrl button svg{width:24px;height:24px}
+.pl-ctrl .big{width:74px;height:74px;background:var(--acc);color:var(--acc-ink);border:0}
+.pl-ctrl .big svg{width:32px;height:32px}
+/* respirations */
+.blist{padding:2px 0}
+.brow{display:flex;align-items:center;gap:12px;padding:10px 14px;width:100%;text-align:left;border-bottom:1px solid var(--line)}
+.brow:last-child{border:0}
+.brow .em{font-size:22px;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;flex:none}
+.brow .nm{flex:1;font-size:15px;line-height:1.25}
+.brow .nm small{display:block;color:var(--mut);font-size:12.5px}
+.brow .pat{font-size:12.5px;color:var(--mut);font-variant-numeric:tabular-nums}
+.mudra{margin:0;padding-left:20px;font-size:14.5px}
+.mudra li{margin:3px 0}
+/* cohérence */
+.coh-stage{height:50vh;display:grid;place-items:center}
+.breath.big{height:auto;width:min(80vw,300px);max-height:none}
+@media (max-height:720px){
+  .pl-info h2{font-size:21px;margin-top:4px}
+  .pl-sk{font-size:13px;min-height:0}
+  .pl-cues{max-height:22vh;font-size:14px;padding-top:8px;padding-bottom:8px}
+  .pl-ctrl{gap:20px}
+  .pl-ctrl button{width:48px;height:48px}
+  .pl-ctrl .big{width:62px;height:62px}
+  .pl-next{margin:6px 0 2px}
+}
+#cohRun .pl-ctrl{margin-top:18px}
+/* cycle de respiration */
+.pl-cues.cyc{list-style:none;padding:8px}
+.cy{display:flex;justify-content:space-between;gap:10px;padding:7px 10px;border-radius:10px;font-size:15px;transition:background .3s}
+.cy b{font-variant-numeric:tabular-nums;white-space:nowrap}
+.cy.on{background:var(--soft);font-weight:650;box-shadow:inset 3px 0 0 var(--acc)}
+.cyhead{font-size:12.5px;color:var(--mut);padding:2px 10px 4px;text-transform:uppercase;letter-spacing:.06em}
+.cyinfo{font-size:13.5px;color:var(--mut);padding:8px 10px 2px}
+.cyinfo p{margin:3px 0}
+#cycleCard .cy{padding:6px 2px}
+#cycleCard .rep{font-size:14px;color:var(--mut);margin-top:8px}
+/* fin */
+.done{text-align:center;padding-top:12vh}
+.done .em{font-size:72px}
+.done h1{font-size:30px;margin:10px 0 6px}
+/* modale */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:flex-end;justify-content:center;z-index:9;padding:16px}
+.modal.on{display:flex}
+.sheet{background:var(--card);color:var(--ink);border-radius:22px;padding:20px;width:100%;max-width:520px;max-height:85vh;overflow:auto}
+.sheet .figbig{height:200px;background:var(--bg);border-radius:16px;padding:10px;margin-bottom:14px}
+.sheet ul{padding-left:20px;margin:10px 0}
+.btns{display:flex;gap:10px;margin-top:16px}
+.btn{flex:1;padding:14px;border-radius:14px;background:var(--bg);border:1px solid var(--line);font-weight:600}
+.btn.pri{background:var(--acc);color:var(--acc-ink);border:0}
+</style>
+</head>
+<body>
+
+<!-- ACCUEIL -->
+<section class="view on" id="home">
+  <div class="row">
+    <div class="sp"><div class="muted" id="date"></div><h1 class="hello" id="hello">Bonjour</h1></div>
+    <button class="iconbtn" id="themeBtn" aria-label="Thème"></button>
+  </div>
+  <div class="stats">
+    <div class="card stat"><b id="sSess">0</b><span>séances</span></div>
+    <div class="card stat"><b id="sMin">0</b><span>minutes</span></div>
+    <div class="card stat"><b id="sStreak">0</b><span>jours d'affilée</span></div>
+  </div>
+  <button class="card suggest" id="suggest"></button>
+  <button class="card suggest" id="cohCard" style="background:#C2566B"><span class="em">💓</span><span><small>Rubrique dédiée</small><b>Cohérence cardiaque</b><small>Un son doux toutes les 5 s pour caler ta respiration</small></span></button>
+  <div class="sect">Choisis ton yoga</div>
+  <div class="grid" id="grid"></div>
+  <div class="sect">Respirations</div>
+  <div class="card blist" id="breathList"></div>
+  <div id="histWrap"></div>
+</section>
+
+<!-- DÉTAIL -->
+<section class="view" id="detail">
+  <div class="row"><button class="iconbtn" id="backBtn" aria-label="Retour"></button></div>
+  <div class="hero" id="hero"></div>
+  <div class="card opt" id="mudraCard"><label>🖐️ Position des doigts — Vishnu mudra</label><ul class="mudra" id="mudraList"></ul></div>
+  <div class="card opt" id="durOpt">
+    <label id="durLabel">Durée des postures</label>
+    <div class="seg" id="segDur"></div>
+  </div>
+  <div class="card opt" id="transOpt">
+    <label>Temps pour se mettre en place entre les postures</label>
+    <div class="seg" id="segTrans"></div>
+  </div>
+  <div class="card opt">
+    <label>Guidage</label>
+    <div class="toggles"><button class="tg" id="tgVoice">🗣️ Voix</button><button class="tg" id="tgBeep">🔔 Sons</button></div>
+  </div>
+  <div class="card opt" id="cycleCard"></div>
+  <div class="sect" id="stepsTitle">Déroulé</div>
+  <div class="card steps" id="steps"></div>
+  <button class="go" id="goBtn">Commencer</button>
+</section>
+
+<!-- LECTEUR -->
+<section class="view" id="player">
+  <div class="pl-top">
+    <button class="iconbtn" id="plX" aria-label="Quitter"></button>
+    <div class="pl-prog"><div class="bar"><i id="plBar"></i></div><small><span id="plCount"></span><span id="plLeft"></span></small></div>
+  </div>
+  <div class="pl-stage" id="plStage"></div>
+  <div class="pl-info"><span class="pl-tag" id="plTag"></span><h2 id="plName"></h2><div class="pl-sk" id="plSk"></div></div>
+  <div class="pl-time" id="plTime">0:00</div>
+  <div class="bar"><i id="plSBar"></i></div>
+  <ul class="card pl-cues" id="plCues"></ul>
+  <div class="pl-next" id="plNext"></div>
+  <div class="pl-ctrl">
+    <button id="plPrev" aria-label="Précédent"></button>
+    <button id="plPlay" class="big" aria-label="Pause"></button>
+    <button id="plSkip" aria-label="Suivant"></button>
+  </div>
+</section>
+
+<!-- FIN -->
+<section class="view" id="done">
+  <div class="done">
+    <div class="em">🙏</div>
+    <h1>Séance terminée</h1>
+    <p class="muted" id="doneTxt"></p>
+    <div class="stats" id="doneStats"></div>
+    <button class="go" id="homeBtn">Retour à l'accueil</button>
+  </div>
+</section>
+
+<!-- COHÉRENCE CARDIAQUE -->
+<section class="view" id="coh">
+  <div class="row"><button class="iconbtn" id="cohX" aria-label="Retour"></button><div class="sp"></div></div>
+  <div id="cohSetup">
+    <div class="hero" style="background:#C2566B"><div class="em">💓</div><h1>Cohérence cardiaque</h1><p>Un son doux toutes les 5 secondes : inspire au premier, expire au suivant. 6 respirations par minute. Idéalement 5 min, 3 fois par jour.</p></div>
+    <div class="card opt"><label>Durée</label><div class="seg" id="cohDur"></div></div>
+    <div class="card opt"><label>Rythme (inspire / expire)</label><div class="seg" id="cohRyt"></div></div>
+    <div class="card opt"><label>Son (touche pour écouter)</label><div class="seg" id="cohSnd"></div></div>
+    <div class="card opt"><label>Conseils</label><ul class="mudra"><li>Une main sur le ventre.</li><li>Inspire par le nez pendant 5 s.</li><li>Expire par la bouche légèrement ouverte ou par le nez pendant 5 s.</li><li>Son aigu → inspire 5 s. Son grave → expire 5 s.</li><li>Tu peux fermer les yeux et ne suivre que le son.</li></ul></div>
+    <button class="go" id="cohGo">Commencer</button>
+  </div>
+  <div id="cohRun" style="display:none">
+    <div class="bar" style="margin-top:14px"><i id="cohBar"></i></div>
+    <div class="coh-stage"><div class="breath big"><div class="ring"></div><div class="bc" id="cohBc"></div><div class="bl" id="cohBl"></div><div class="bn" id="cohBn"></div></div></div>
+    <div class="pl-time" id="cohLeft">5:00</div>
+    <div class="muted" style="text-align:center">restantes</div>
+    <div class="pl-ctrl"><button id="cohPlay" class="big" aria-label="Pause"></button><button id="cohStop" aria-label="Arrêter"></button></div>
+  </div>
+</section>
+
+<div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
+
+<script>
+"use strict";
+const $=s=>document.querySelector(s);
+const store={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const settings=Object.assign({voice:true,beep:true,trans:5,dur:1,theme:'auto',cohMin:5,cohR:'5-5',cohSnd:'bol'},store.get('yoga_set',{}));
+const saveSettings=()=>store.set('yoga_set',settings);
+
+const ICON={
+  back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
+  x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  play:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>',
+  pause:'<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4.2" height="14" rx="1.3"/><rect x="13.8" y="5" width="4.2" height="14" rx="1.3"/></svg>',
+  prev:'<svg viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="5" width="2.6" height="14" rx="1"/><path d="M19 6.2v11.6a1 1 0 0 1-1.55.83L9.6 13.2a1.4 1.4 0 0 1 0-2.4l7.85-5.43A1 1 0 0 1 19 6.2z"/></svg>',
+  next:'<svg viewBox="0 0 24 24" fill="currentColor"><rect x="16.4" y="5" width="2.6" height="14" rx="1"/><path d="M5 6.2v11.6a1 1 0 0 0 1.55.83l7.85-5.43a1.4 1.4 0 0 0 0-2.4L6.55 5.37A1 1 0 0 0 5 6.2z"/></svg>',
+  moon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>',
+  sun:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
+  stop:'<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>',
+  auto:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg>'
+};
+
+/* ---------- Silhouettes : tête, cou, bassin, coude/main loin, coude/main près, genou/pied loin, genou/pied près, [courbe dos] ---------- */
+const LEGS_X=[30,86,56,88,70,86,44,88];
+const K={
+  montagne:[50,14,50,24,50,52,46,38,45,52,54,38,55,52,48,70,48,88,52,70,52,88],
+  bras_leves:[50,16,50,26,50,54,43,16,45,3,57,16,55,3,48,71,48,88,52,71,52,88],
+  flexion_laterale:[44,17,47,27,50,54,39,16,32,6,53,14,40,3,48,71,48,88,52,71,52,88,47,40],
+  flexion_avant:[58,80,57,72,50,52,55,80,53,88,57,80,55,88,50,70,50,88,51,70,51,88,58,58],
+  demi_flexion:[78,52,70,54,46,52,60,64,56,74,62,64,58,74,46,70,46,88,47,70,47,88],
+  planche:[80,62,72,66,45,74,71,77,71,88,73,77,73,88,30,80,14,86,30,80,15,86],
+  chaturanga:[80,76,72,78,45,80,62,73,71,88,64,73,73,88,30,83,14,87,30,83,15,87],
+  cobra:[74,60,68,68,45,86,64,80,68,88,66,80,70,88,28,88,12,88,28,88,12,88,58,84],
+  chien_tete_haut:[76,50,70,58,45,79,69,73,69,88,71,73,71,88,30,83,12,87,30,83,13,87,60,74],
+  chien_tete_bas:[70,72,66,62,45,38,73,74,80,88,75,74,82,88,34,63,24,88,35,63,26,88],
+  enfant:[72,82,62,80,32,78,76,85,88,87,77,86,89,88,50,88,26,88,51,88,27,88,48,70],
+  chat:[76,78,68,68,38,68,69,78,70,88,70,78,71,88,38,88,18,88,39,88,19,88,53,54],
+  vache:[77,58,68,66,38,66,69,77,70,88,70,77,71,88,38,88,18,88,39,88,19,88,53,78],
+  guerrier1:[51,20,51,30,50,58,45,22,47,9,57,22,55,9,38,74,24,88,66,70,68,88],
+  guerrier2:[51,22,50,32,50,56,36,32,22,32,64,32,78,32,35,72,22,88,67,68,70,88],
+  triangle:[73,35,66,40,50,58,66,55,67,70,66,28,66,15,40,73,30,88,62,73,72,88],
+  arbre:[50,16,50,26,50,52,42,16,50,4,58,16,50,4,63,62,51,66,50,70,50,88],
+  chaise:[59,27,54,36,38,62,64,27,72,15,66,27,74,15,56,68,52,88,57,68,53,88],
+  guerrier3:[82,48,74,50,48,52,84,50,94,50,85,51,95,51,32,52,16,52,48,70,48,88],
+  fente_basse:[51,36,50,46,48,74,44,36,46,22,58,36,56,22,32,88,14,86,66,70,68,88],
+  planche_laterale:[74,56,68,64,44,74,70,76,71,88,68,50,68,36,30,80,15,86,30,80,16,86],
+  pont:[88,84,78,85,50,64,66,88,52,88,67,88,53,88,32,62,30,88,33,62,31,88,66,70],
+  torsion_couchee:[88,84,78,86,50,86,78,78,78,70,70,88,62,88,52,76,38,82,30,86,14,86],
+  savasana:[88,84,78,86,50,86,66,87,54,88,67,87,55,88,32,86,14,85,32,87,14,87],
+  genoux_poitrine:[86,82,76,86,52,86,66,78,60,70,67,78,61,70,62,64,46,66,63,64,47,66],
+  jambes_mur:[84,84,74,86,50,86,64,87,56,88,65,87,57,88,50,66,50,46,51,66,51,46],
+  assise:[50,42,50,52,50,80,38,68,33,82,62,68,67,82].concat(LEGS_X),
+  meditation:[50,42,50,52,50,80,40,70,46,80,60,70,54,80].concat(LEGS_X),
+  nuque:[45,43,50,52,50,80,38,68,33,82,62,68,67,82].concat(LEGS_X),
+  nadi:[50,42,50,52,50,80,38,68,33,82,62,62,53,46].concat(LEGS_X),
+  etirement_lateral:[40,46,44,54,50,80,36,70,30,84,54,40,40,28].concat(LEGS_X,[50,66]),
+  torsion_assise:[52,42,50,52,50,80,40,66,30,84,58,66,36,78].concat(LEGS_X),
+  pince:[68,74,60,72,30,86,62,80,72,84,63,80,73,85,50,86,72,86,51,86,73,86,42,66],
+  papillon:[50,44,50,54,50,82,42,70,48,86,58,70,52,86,28,80,48,88,72,80,52,88],
+  pigeon:[54,42,53,52,50,80,56,68,58,86,58,68,60,86,68,86,52,88,30,88,12,88],
+  bateau:[34,48,38,57,50,84,48,62,58,64,49,63,59,65,62,66,78,66,63,67,79,67],
+  sphinx:[74,64,66,72,44,87,66,88,80,88,67,88,81,88,28,88,12,88,28,88,12,88,56,84],
+  guirlande:[50,44,50,54,50,80,36,66,50,62,64,66,50,62,30,70,42,88,70,70,58,88],
+  bhramari:[50,42,50,52,50,80,36,50,44,42,64,50,56,42].concat(LEGS_X),
+  hara:[50,42,50,52,50,80,41,66,50,70,59,66,50,72].concat(LEGS_X)
+};
+
+/* ---------- Séquences de respiration particulières ---------- */
+// phase = [libellé, secondes, type (in/out/hold/pump/rest), annonce vocale facultative (texte, ou false = juste un bip)]
+// phase[4] = ligne du cycle à surligner (quand le cycle affiché est personnalisé)
+const tib=(g,intro,outL)=>{const r=[];for(let i=0;i<3;i++){r.push(["Inspire par le nez ("+(i+1)+"/3)",4,'in',i===0?intro:undefined,2*g]);r.push([outL+" ("+(i+1)+"/3)",4,'out',undefined,2*g+1]);}return r};
+const TIBET=[].concat(
+  tib(0,"Annulaire sur la narine gauche. Inspire par le nez, 4 secondes.","Expire fort par la narine droite"),
+  tib(1,"Pouce sur la narine droite. Inspire par le nez, 4 secondes.","Expire fort par la narine gauche"),
+  tib(2,"Main sur la cuisse, deux narines ouvertes. Inspire, 4 secondes.","Expire fort par les deux narines"));
+const TIBET_CYC=[["1. Annulaire sur la narine gauche : inspire par le nez",4],["Expire fort par la narine droite · 3 fois",4],["2. Pouce sur la narine droite : inspire par le nez",4],["Expire fort par la narine gauche · 3 fois",4],["3. Main sur la cuisse : inspire par le nez",4],["Expire fort par les deux narines · 3 fois",4]];
+const KAPALA=[["Expire sec par le nez",1,'pump',"Expire d'un coup sec par le nez, une fois par seconde, trente fois",0]];
+for(let i=1;i<30;i++)KAPALA.push(["Expire sec par le nez",1,'pump',false,0]);
+KAPALA.push(["Respire normalement",30,'rest',"Respire normalement, 30 secondes",1]);
+const KAPALA_CYC=[["Expire d'un coup sec par le nez, ventre rentré · 30 fois, 1 par seconde",30],["Respire normalement",30]];
+const MUDRA=["Utilise la main droite.","Index et majeur repliés dans la paume.","Le pouce bouche la narine droite.","L'annulaire bouche la narine gauche.","Appuie légèrement sur la partie molle, sous l'os du nez.","La main gauche repose sur la cuisse.","Mouche-toi avant de commencer."];
+
+/* ---------- Postures ---------- */
+const POSES={
+  montagne:{n:"Montagne",s:"Tadasana",c:["Pieds largeur de bassin, poids réparti sur toute la plante des pieds.","Grandis-toi par le sommet du crâne, épaules relâchées loin des oreilles.","Engage doucement les cuisses et le ventre, respire calmement par le nez."]},
+  bras_leves:{n:"Bras levés",s:"Urdhva Hastasana",c:["Inspire en levant les bras au-dessus de la tête.","Paumes face à face, regard vers le haut sans écraser la nuque.","Garde les côtes basses et le ventre engagé."]},
+  flexion_laterale:{n:"Flexion latérale debout",s:"Parsva Urdhva Hastasana",c:["Bras levés, attrape un poignet avec l'autre main.","Expire en penchant le buste sur le côté.","Garde les deux pieds bien ancrés et respire dans les côtes étirées."]},
+  flexion_avant:{n:"Flexion avant",s:"Uttanasana",c:["Expire en te penchant vers l'avant depuis les hanches.","Laisse pendre la tête et les bras, genoux fléchis si besoin.","Relâche complètement la nuque et les épaules."]},
+  demi_flexion:{n:"Demi-flexion avant",s:"Ardha Uttanasana",c:["Mains sur les tibias ou au sol.","Inspire en allongeant le dos à plat, poitrine vers l'avant.","Regard vers le sol, un peu devant toi."]},
+  planche:{n:"Planche",s:"Phalakasana",c:["Mains sous les épaules, corps aligné de la tête aux talons.","Pousse le sol, engage les abdos et les fessiers.","Ne laisse pas le bassin s'affaisser (genoux au sol possible)."]},
+  chaturanga:{n:"Chaturanga",s:"Chaturanga Dandasana",c:["Depuis la planche, plie les coudes le long du corps.","Descends en bloc à mi-hauteur, genoux au sol si besoin.","Coudes serrés contre les côtes."]},
+  cobra:{n:"Cobra",s:"Bhujangasana",c:["Allongé sur le ventre, mains sous les épaules.","Inspire en soulevant la poitrine, coudes près du corps.","Le bas du ventre reste au sol, les épaules descendent."]},
+  chien_tete_haut:{n:"Chien tête en haut",s:"Urdhva Mukha Svanasana",c:["Bras tendus, poitrine ouverte vers l'avant.","Cuisses décollées, appui sur le dessus des pieds.","Épaules loin des oreilles. (Ou reste en cobra.)"]},
+  chien_tete_bas:{n:"Chien tête en bas",s:"Adho Mukha Svanasana",c:["Mains bien écartées, pousse le bassin vers le haut et l'arrière.","Talons vers le sol, genoux fléchis si l'arrière des jambes tire.","Laisse la tête pendre entre les bras, respire profondément."]},
+  enfant:{n:"Posture de l'enfant",s:"Balasana",c:["Genoux au sol, fesses vers les talons.","Front posé, bras allongés devant toi ou le long du corps.","Respire dans le dos et laisse tout se relâcher."]},
+  chat:{n:"Chat",s:"Marjaryasana",c:["À quatre pattes, mains sous les épaules, genoux sous les hanches.","Expire en arrondissant le dos, menton vers la poitrine.","Pousse le sol avec les mains."]},
+  vache:{n:"Vache",s:"Bitilasana",c:["Inspire en creusant le dos, ventre vers le sol.","Poitrine vers l'avant, regard légèrement vers le haut.","Garde la nuque longue."]},
+  guerrier1:{n:"Guerrier 1",s:"Virabhadrasana I",c:["Grand pas en arrière, pied arrière tourné à 45°.","Genou avant plié au-dessus de la cheville, bassin face à l'avant.","Lève les bras, épaules relâchées."]},
+  guerrier2:{n:"Guerrier 2",s:"Virabhadrasana II",c:["Jambes écartées, pied avant vers l'avant, pied arrière parallèle au bord du tapis.","Plie le genou avant au-dessus de la cheville.","Bras à l'horizontale, regard au-dessus de la main avant."]},
+  triangle:{n:"Triangle",s:"Trikonasana",c:["Jambes tendues et écartées, pied avant vers l'avant.","Allonge le buste au-dessus de la jambe avant puis bascule sur le côté.","Main basse sur le tibia, bras haut vers le ciel."]},
+  arbre:{n:"Arbre",s:"Vrksasana",c:["Poids sur une jambe, plante de l'autre pied contre le mollet ou la cuisse (jamais sur le genou).","Mains jointes devant la poitrine ou au-dessus de la tête.","Fixe un point devant toi pour garder l'équilibre."]},
+  chaise:{n:"Chaise",s:"Utkatasana",c:["Pieds joints, plie les genoux comme pour t'asseoir.","Poids dans les talons, bras levés dans le prolongement du buste.","Ventre engagé, dos long."]},
+  guerrier3:{n:"Guerrier 3",s:"Virabhadrasana III",c:["Bascule le buste vers l'avant en levant une jambe derrière toi.","Corps à l'horizontale, bassin parallèle au sol.","Bras tendus devant ou mains sur les hanches."]},
+  fente_basse:{n:"Fente basse",s:"Anjaneyasana",c:["Pied avant entre les mains, genou arrière posé au sol.","Descends doucement le bassin vers l'avant.","Lève les bras en ouvrant la poitrine."]},
+  planche_laterale:{n:"Planche latérale",s:"Vasisthasana",c:["Depuis la planche, pivote sur une main et le bord du pied.","Bassin haut, corps en ligne droite.","Bras du haut tendu vers le ciel (genou au sol possible)."]},
+  pont:{n:"Pont",s:"Setu Bandhasana",c:["Allongé sur le dos, pieds à plat près des fesses, largeur de bassin.","Inspire en soulevant le bassin, pousse dans les pieds.","Bras au sol, ne tourne pas la tête."]},
+  torsion_couchee:{n:"Torsion allongée",s:"Supta Matsyendrasana",c:["Allongé sur le dos, ramène un genou vers la poitrine.","Laisse-le tomber de l'autre côté, bras ouverts en croix.","Regarde vers la main opposée, épaules au sol."]},
+  savasana:{n:"Relaxation finale",s:"Savasana",c:["Allongé sur le dos, jambes et bras relâchés, paumes vers le ciel.","Ferme les yeux, laisse le corps devenir lourd.","Ne contrôle plus la respiration, observe simplement."]},
+  genoux_poitrine:{n:"Genoux à la poitrine",s:"Apanasana",c:["Allongé sur le dos, ramène les deux genoux vers la poitrine.","Entoure-les avec les bras.","Berce-toi doucement de gauche à droite pour masser le bas du dos."]},
+  jambes_mur:{n:"Jambes en l'air",s:"Viparita Karani",c:["Allongé sur le dos, jambes à la verticale, contre un mur si possible.","Bras au sol, paumes vers le ciel.","Détends les pieds et laisse les jambes se reposer."]},
+  assise:{n:"Posture assise",s:"Sukhasana",c:["Assis en tailleur, sur un coussin si besoin.","Dos droit, épaules relâchées, mains sur les genoux.","Ferme les yeux et respire par le nez."]},
+  nuque:{n:"Échauffement de la nuque",s:"Griva Sanchalana",c:["Assis, dos droit.","Penche doucement l'oreille vers une épaule, puis vers l'autre.","Fais ensuite de lents demi-cercles avec le menton vers la poitrine."]},
+  etirement_lateral:{n:"Étirement latéral assis",s:"Parsva Sukhasana",c:["Assis en tailleur, une main au sol à côté de toi.","Lève l'autre bras et penche-toi sur le côté.","Respire dans les côtes étirées."]},
+  torsion_assise:{n:"Torsion assise",s:"Parivrtta Sukhasana",c:["Assis en tailleur, inspire en grandissant le dos.","Expire en tournant le buste, main arrière au sol.","L'autre main sur le genou opposé, regard par-dessus l'épaule."]},
+  pince:{n:"Pince assise",s:"Paschimottanasana",c:["Assis, jambes tendues devant toi (genoux fléchis si besoin).","Inspire en grandissant le dos, expire en basculant depuis les hanches.","Mains sur les jambes ou les pieds, sans forcer."]},
+  papillon:{n:"Papillon",s:"Baddha Konasana",c:["Assis, plantes de pieds collées, genoux ouverts.","Tiens tes pieds et grandis le dos.","Laisse les genoux descendre naturellement, sans forcer."]},
+  pigeon:{n:"Pigeon",s:"Eka Pada Rajakapotasana",c:["Genou avant au sol derrière le poignet, tibia en diagonale.","Jambe arrière allongée, bassin bien d'équerre.","Reste redressé ou penche-toi vers l'avant sur les avant-bras."]},
+  bateau:{n:"Bateau",s:"Navasana",c:["Assis, genoux pliés, penche le buste légèrement en arrière.","Décolle les pieds, tibias parallèles au sol (ou jambes tendues).","Bras tendus vers l'avant, dos droit."]},
+  sphinx:{n:"Sphinx",s:"Salamba Bhujangasana",c:["Allongé sur le ventre, avant-bras au sol, coudes sous les épaules.","Soulève la poitrine en douceur.","Relâche les fessiers et laisse le bas du dos se détendre."]},
+  guirlande:{n:"Guirlande",s:"Malasana",c:["Accroupi, pieds écartés, talons au sol si possible (sinon sur une couverture).","Mains jointes, les coudes poussent l'intérieur des genoux.","Dos long, poitrine ouverte."]},
+  abdominale:{n:"Respiration abdominale",s:"Respiration diaphragmatique",fig:'meditation',c:["Assis confortablement, une main sur le ventre.","Inspire par le nez en gonflant le ventre.","Expire lentement en le rentrant, plus longtemps que l'inspiration."],br:[["Inspire par le nez, ventre gonflé",4,'in'],["Expire lentement, ventre rentré",6,'out']]},
+  ujjayi:{n:"Ujjayi",s:"Souffle de l'océan",fig:'meditation',use:"Concentration, chaleur interne",c:["Bouche fermée, resserre légèrement l'arrière de la gorge, comme pour embuer une vitre.","Inspire par le nez 5 s, avec un son de vague.","Expire par le nez 5 s, avec le même son."],br:[["Inspire par le nez (son de vague)",5,'in'],["Expire par le nez (même son)",5,'out']]},
+  carree:{n:"Respiration carrée",s:"Sama Vritti",fig:'meditation',use:"Stress, clarté",c:["Mains sur les cuisses, bouche fermée.","Inspire par le nez 4 s, puis retiens 4 s.","Expire par le nez 4 s, puis reste poumons vides 4 s."],br:[["Inspire par le nez",4,'in'],["Retiens, poumons pleins",4,'hold'],["Expire par le nez",4,'out'],["Retiens, poumons vides",4,'hold']]},
+  nadi:{n:"Nadi Shodhana",s:"Respiration alternée",fig:'nadi',mudra:1,use:"Équilibre, apaisement",c:["Main droite en Vishnu mudra, main gauche sur la cuisse.","Pouce sur la narine droite : inspire à gauche 4 s. Bouche les deux narines, retiens 4 s.","Lève le pouce, expire à droite 8 s.","Inspire à droite 4 s, bouche les deux, retiens 4 s, lève l'annulaire et expire à gauche 8 s."],br:[["Inspire par la narine gauche",4,'in'],["Bouche les deux narines, retiens",4,'hold'],["Expire par la narine droite",8,'out'],["Inspire par la narine droite",4,'in'],["Bouche les deux narines, retiens",4,'hold'],["Expire par la narine gauche",8,'out']]},
+  coherence:{n:"Cohérence cardiaque",s:"5 secondes / 5 secondes",fig:'hara',use:"Anxiété, régulation émotionnelle",c:["Une main sur le ventre.","Inspire par le nez 5 s.","Expire par la bouche légèrement ouverte ou par le nez, 5 s."],br:[["Inspire par le nez",5,'in'],["Expire par la bouche ou le nez",5,'out']]},
+  relax478:{n:"Respiration 4-7-8",s:"Endormissement",fig:'meditation',use:"Endormissement",c:["Langue au palais pendant tout l'exercice.","Inspire par le nez, bouche fermée, 4 s, puis retiens 7 s.","Expire par la bouche en soufflant « whoosh » 8 s. 4 cycles maximum au début."],br:[["Inspire par le nez, bouche fermée",4,'in'],["Retiens",7,'hold'],["Expire par la bouche « whoosh »",8,'out']]},
+  meditation:{n:"Méditation",s:"Dhyana",c:["Assis, yeux fermés, mains posées sur les cuisses.","Observe le souffle entrer et sortir, sans le modifier.","Si ton esprit s'égare, reviens doucement au souffle."]},
+  anapanasati:{n:"Ānāpānasati",s:"Bouddhisme",fig:'meditation',count:10,use:"Concentration",c:["Mains posées sur les cuisses, bouche fermée.","Inspire par le nez naturellement. Expire et compte : 1.","Continue jusqu'à 10 expirations, puis recommence à 1.","Le rythme affiché est indicatif : suis ton souffle naturel."],br:[["Inspire par le nez",4,'in'],["Expire par le nez et compte",6,'out']]},
+  tibet9:{n:"9 respirations purificatrices",s:"Tibet",fig:'nadi',mudra:1,use:"Vider le mental",c:["Annulaire sur la narine gauche : inspire 4 s, expire fort à droite 4 s. Trois fois.","Pouce sur la narine droite : inspire 4 s, expire fort à gauche 4 s. Trois fois.","Main sur la cuisse, deux narines ouvertes : inspire 4 s, expire fort par les deux 4 s. Trois fois."],br:TIBET,cyc:TIBET_CYC},
+  pharaon:{n:"Respiration rythmique hermétique",s:"Pharaon",fig:'meditation',use:"Ancrage, stabilité",c:["Assis droit, mains à plat sur les cuisses, pieds joints, bouche fermée.","Inspire par le nez 4 s, retiens 2 s.","Expire par le nez 4 s, poumons vides 2 s."],br:[["Inspire par le nez",4,'in'],["Retiens, poumons pleins",2,'hold'],["Expire par le nez",4,'out'],["Retiens, poumons vides",2,'hold']]},
+  merkaba:{n:"Mer-Ka-Ba simplifiée",s:"Thoth",fig:'meditation',use:"Se calmer, se recentrer",c:["Mains sur les cuisses, langue au palais derrière les dents.","Inspire par le nez 7 s : l'énergie de la terre et du ciel monte vers le cœur. Retiens 3 s.","Expire doucement, bouche entrouverte, 7 s : la lumière s'étend en sphère."],br:[["Inspire par le nez",7,'in'],["Retiens",3,'hold'],["Expire doucement, bouche entrouverte",7,'out']]},
+  bhramari:{n:"Bhramari",s:"Souffle de l'abeille",fig:'bhramari',use:"Calmer la colère, apaiser la tête",c:["Pouces sur le petit cartilage des oreilles (pas le nez), index au-dessus des sourcils, autres doigts sur les yeux fermés, sans appuyer.","Bouche fermée, dents légèrement desserrées. Inspire par le nez 4 s.","Expire par le nez 7 s en bourdonnant « mmm »."],br:[["Inspire par le nez",4,'in'],["Expire par le nez en bourdonnant « mmm »",7,'out']]},
+  kapalabhati:{n:"Kapalabhati",s:"Crâne lumineux",fig:'meditation',use:"Énergie, réveil",c:["Mains sur les genoux, bouche fermée.","Expire par le nez d'un coup sec en rentrant le ventre ; l'inspiration se fait toute seule quand le ventre se relâche.","Une expiration par seconde, 30 fois, puis 30 s de respiration normale. 3 séries."],br:KAPALA,cyc:KAPALA_CYC},
+  sitali:{n:"Sitali",s:"Souffle rafraîchissant",fig:'meditation',use:"Chaleur, irritation",c:["Langue roulée en tube qui dépasse des lèvres (sinon : dents serrées, lèvres ouvertes = Sitkari).","Inspire par la bouche, par la langue ou entre les dents, 4 s.","Rentre la langue, bouche fermée, retiens 2 s, puis expire par le nez 6 s."],br:[["Inspire par la bouche, langue roulée",4,'in'],["Bouche fermée, retiens",2,'hold'],["Expire par le nez",6,'out']]},
+  surya:{n:"Surya Bhedana",s:"Souffle solaire",fig:'nadi',mudra:1,use:"Motivation, énergie le matin",c:["Annulaire sur la narine gauche : inspire à droite 4 s.","Pouce et annulaire bouchent les deux narines : retiens 4 s.","Lève l'annulaire (le pouce reste à droite), expire à gauche 6 s. On inspire toujours à droite."],br:[["Inspire par la narine droite",4,'in'],["Bouche les deux narines, retiens",4,'hold'],["Expire par la narine gauche",6,'out']]},
+  chandra:{n:"Chandra Bhedana",s:"Souffle lunaire",fig:'nadi',mudra:1,use:"Détente le soir",c:["Pouce sur la narine droite : inspire à gauche 4 s.","Pouce et annulaire bouchent les deux narines : retiens 4 s.","Lève le pouce (l'annulaire reste à gauche), expire à droite 6 s. On inspire toujours à gauche."],br:[["Inspire par la narine gauche",4,'in'],["Bouche les deux narines, retiens",4,'hold'],["Expire par la narine droite",6,'out']]},
+  hara:{n:"Respiration du hara",s:"Zen",fig:'hara',use:"Ancrage, présence",c:["Une main sous le nombril, l'autre par-dessus. Bouche fermée.","Inspire par le nez 4 s, le ventre se gonfle sous la main.","Expire par le nez 8 s, le ventre se vide lentement."],br:[["Inspire par le nez, ventre gonflé",4,'in'],["Expire par le nez, ventre qui se vide",8,'out']]}
+};
+for(const id in POSES){POSES[id].k=K[POSES[id].fig||id];}
+
+/* ---------- Programmes ---------- */
+const SA='Salutation au soleil';
+const sunA=()=>[
+  {p:'montagne',t:5,f:1,g:SA,n:"Debout, mains jointes. Expire."},
+  {p:'bras_leves',t:5,f:1,g:SA,n:"Inspire, lève les bras."},
+  {p:'flexion_avant',t:5,f:1,g:SA,n:"Expire, penche-toi en avant."},
+  {p:'demi_flexion',t:5,f:1,g:SA,n:"Inspire, dos plat."},
+  {p:'planche',t:5,f:1,g:SA,n:"Expire, recule en planche."},
+  {p:'chaturanga',t:5,f:1,g:SA,n:"Descends en douceur."},
+  {p:'chien_tete_haut',t:5,f:1,g:SA,n:"Inspire, ouvre la poitrine."},
+  {p:'chien_tete_bas',t:20,f:1,g:SA,n:"Expire, chien tête en bas. Trois respirations."},
+  {p:'demi_flexion',t:6,f:1,g:SA,n:"Avance les pieds. Inspire, dos plat."},
+  {p:'flexion_avant',t:5,f:1,g:SA,n:"Expire, relâche vers le bas."},
+  {p:'bras_leves',t:5,f:1,g:SA,n:"Inspire, remonte bras levés."},
+  {p:'montagne',t:5,f:1,g:SA,n:"Expire, mains devant le cœur."}
+];
+const rep=(n,fn)=>{let a=[];for(let i=0;i<n;i++)a=a.concat(fn());return a};
+const CV='Chat-vache';
+const catcow=n=>rep(n,()=>[{p:'chat',t:6,f:1,g:CV,n:"Expire, arrondis le dos."},{p:'vache',t:6,f:1,g:CV,n:"Inspire, creuse le dos."}]);
+const both=(p,t,o)=>[Object.assign({p,t,side:'d'},o||{}),Object.assign({p,t,side:'g'},o||{})];
+const VIN='Vinyasa';
+const vinyasa=()=>[{p:'planche',t:5,f:1,g:VIN,n:"Planche."},{p:'chaturanga',t:5,f:1,g:VIN,n:"Expire, descends."},{p:'chien_tete_haut',t:5,f:1,g:VIN,n:"Inspire, ouvre la poitrine."},{p:'chien_tete_bas',t:15,f:1,g:VIN,n:"Expire, chien tête en bas."}];
+const warriorSide=sd=>[{p:'guerrier1',t:30,side:sd},{p:'guerrier2',t:30,side:sd},{p:'triangle',t:30,side:sd}].concat(vinyasa());
+
+const PROGS=[
+  {id:'reveil',n:"Réveil en douceur",t:"Doux · Matin",e:"🌅",col:"#D98B4E",d:"Une mise en route tranquille pour réveiller la colonne, les hanches et la respiration.",steps:[].concat(
+    [{p:'abdominale',t:60},{p:'nuque',t:45}],catcow(5),[{p:'enfant',t:40},{p:'chien_tete_bas',t:40}],both('fente_basse',30),
+    [{p:'flexion_avant',t:40}],sunA(),both('flexion_laterale',20),[{p:'montagne',t:30},{p:'savasana',t:60}])},
+  {id:'hatha',n:"Hatha classique",t:"Équilibré",e:"🧘",col:"#4F8068",d:"Le yoga traditionnel : postures tenues, respiration consciente et relaxation. Idéal pour tous les jours.",steps:[].concat(
+    [{p:'abdominale',t:60}],catcow(4),[{p:'chien_tete_bas',t:45}],rep(2,sunA),
+    both('guerrier1',30),[{p:'guerrier2',t:40,side:'d'},{p:'triangle',t:40,side:'d'},{p:'guerrier2',t:40,side:'g'},{p:'triangle',t:40,side:'g'}],
+    both('arbre',30),[{p:'chaise',t:30},{p:'enfant',t:40},{p:'cobra',t:30},{p:'enfant',t:30},{p:'pont',t:40},{p:'papillon',t:60},{p:'pince',t:60}],
+    both('torsion_couchee',45),[{p:'savasana',t:180}])},
+  {id:'vinyasa',n:"Vinyasa Flow",t:"Dynamique",e:"🌊",col:"#3C7A9E",d:"Des enchaînements fluides synchronisés avec le souffle. Ça chauffe et ça tonifie.",steps:[].concat(
+    [{p:'ujjayi',t:60}],rep(3,sunA),[{p:'chien_tete_bas',t:20}],warriorSide('d'),warriorSide('g'),
+    both('planche_laterale',20),[{p:'bateau',t:30},{p:'assise',t:15},{p:'bateau',t:30},{p:'pont',t:40},{p:'enfant',t:30}],
+    both('pigeon',60),[{p:'pince',t:60}],both('torsion_couchee',40),[{p:'savasana',t:180}])},
+  {id:'yin',n:"Yin Yoga",t:"Lent · Profond",e:"🌙",col:"#6B5B95",d:"Postures au sol tenues longtemps pour assouplir en profondeur les hanches et le dos. Lâcher-prise total.",steps:[].concat(
+    [{p:'abdominale',t:60},{p:'papillon',t:180},{p:'sphinx',t:150},{p:'enfant',t:90}],both('pigeon',150),
+    [{p:'pince',t:180}],both('torsion_couchee',90),[{p:'jambes_mur',t:180},{p:'savasana',t:180}])},
+  {id:'soir',n:"Détente du soir",t:"Sommeil",e:"✨",col:"#4A5A8A",d:"Pour relâcher les tensions de la journée et préparer un sommeil profond.",steps:[].concat(
+    [{p:'relax478',t:76},{p:'nuque',t:45}],catcow(4),[{p:'enfant',t:60},{p:'papillon',t:90},{p:'pince',t:90},{p:'genoux_poitrine',t:45}],
+    both('torsion_couchee',45),[{p:'jambes_mur',t:120},{p:'savasana',t:180}])},
+  {id:'dos',n:"Dos & posture",t:"Soulagement",e:"🌿",col:"#5E8C4A",d:"Mobilise et étire tout le dos en douceur. Parfait après une journée assis.",steps:[].concat(
+    [{p:'abdominale',t:45},{p:'genoux_poitrine',t:45}],both('torsion_couchee',40),[{p:'pont',t:30},{p:'genoux_poitrine',t:20},{p:'pont',t:30}],
+    catcow(5),[{p:'enfant',t:45},{p:'sphinx',t:60},{p:'cobra',t:20},{p:'enfant',t:30},{p:'chien_tete_bas',t:45}],both('fente_basse',30),
+    both('etirement_lateral',30),[{p:'flexion_avant',t:40},{p:'montagne',t:30},{p:'savasana',t:120}])},
+  {id:'power',n:"Power Yoga",t:"Renforcement",e:"🔥",col:"#C0503A",d:"Un yoga musclé : gainage, jambes et équilibre. Tu vas transpirer !",steps:[].concat(
+    rep(3,sunA),[{p:'chaise',t:45}],
+    [{p:'guerrier1',t:30,side:'d'},{p:'guerrier3',t:20,side:'d'},{p:'guerrier2',t:30,side:'d'}],vinyasa(),
+    [{p:'guerrier1',t:30,side:'g'},{p:'guerrier3',t:20,side:'g'},{p:'guerrier2',t:30,side:'g'}],vinyasa(),
+    [{p:'planche',t:45}],both('planche_laterale',30),[{p:'enfant',t:20},{p:'bateau',t:30},{p:'assise',t:10},{p:'bateau',t:30},{p:'chaise',t:45}],
+    both('arbre',30),[{p:'guirlande',t:45},{p:'pont',t:45},{p:'pont',t:45},{p:'pince',t:60},{p:'savasana',t:120}])},
+  {id:'souffle',n:"Respiration & méditation",t:"Pranayama",e:"🌬️",col:"#3E8E8A",d:"Uniquement assis : techniques de respiration pour calmer le mental, puis un temps de méditation.",steps:[
+    {p:'assise',t:30},{p:'abdominale',t:90},{p:'ujjayi',t:90},{p:'carree',t:112},{p:'nadi',t:128},{p:'coherence',t:120},{p:'meditation',t:120}]},
+  {id:'bureau',n:"Pause bureau",t:"Express · 6 min",e:"💻",col:"#8A7350",d:"Une mini-séance assise et debout pour détendre la nuque, le dos et les épaules.",steps:[].concat(
+    [{p:'coherence',t:60},{p:'nuque',t:40}],both('etirement_lateral',20),both('torsion_assise',25),[{p:'bras_leves',t:20}],both('flexion_laterale',15),
+    [{p:'flexion_avant',t:30},{p:'montagne',t:30}])}
+];
+const B=(id,e,col,t,o)=>{const po=POSES[id];return{id:'b_'+id,n:po.n,t:po.use,e,col,d:po.s+' · '+po.use+'.',breath:1,steps:[Object.assign({p:id,t},o||{})]}};
+const BREATHS=[
+  B('coherence','💓','#C2566B',300),
+  B('carree','🟩','#4F8068',300),
+  B('relax478','😴','#4A5A8A',76,{fixed:1}),
+  B('nadi','☯️','#6B5B95',320),
+  B('ujjayi','🌊','#3C7A9E',360),
+  B('hara','🪷','#8A7350',600),
+  B('anapanasati','☸️','#B08A3E',600),
+  B('bhramari','🐝','#C79A2B',77,{fixed:1}),
+  B('kapalabhati','⚡','#D98B4E',180,{fixed:1}),
+  B('sitali','❄️','#3E8E8A',120),
+  B('surya','☀️','#D9962B',140),
+  B('chandra','🌙','#4A5A8A',140),
+  B('tibet9','🏔️','#5E7C8C',72,{fixed:1}),
+  B('pharaon','🔺','#A0703A',360),
+  B('merkaba','✴️','#7A5BA6',255)
+];
+const COH={id:'coherence_mode',n:'Cohérence cardiaque',e:'💓',col:'#C2566B'};
+const progById=id=>PROGS.concat(BREATHS,[COH]).find(p=>p.id===id);
+const cycleLines=po=>po.cyc||po.br.map(x=>[x[0],x[1]]);
+function breathText(po,t){
+  const cd=po.br.reduce((a,x)=>a+x[1],0),n=Math.max(1,Math.round(t/cd));
+  return `${cycleLines(po).map(l=>`<div class="cy"><span>${l[0]}</span><b>${l[1]} s</b></div>`).join('')}`+
+    `<div class="rep">À répéter : <b>${n} ${po.br===KAPALA?'séries':n>1?'cycles':'fois'}</b></div>`+
+    `<div class="how">${po.c.map(c=>`<p>• ${c}</p>`).join('')}${po.mudra?'<p>🖐️ Main droite en Vishnu mudra : pouce = narine droite, annulaire = narine gauche.</p>':''}</div>`;
+}
+const brPattern=p=>{const br=POSES[p.steps[0].p].br;const a=br.length<=4?br:br.length===6?br.slice(0,3):[];return a.map(x=>x[1]).join('-')};
+
+/* ---------- Utilitaires ---------- */
+const fmt=s=>{s=Math.max(0,Math.round(s));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
+const sideTxt=sd=>sd==='d'?'Côté droit':sd==='g'?'Côté gauche':'';
+function figSVG(k,mirror){
+  const g=i=>k[2*i]+','+k[2*i+1];
+  const torso=k.length>=24?`M${g(2)} Q${k[22]},${k[23]} ${g(1)}`:`M${g(2)} L${g(1)}`;
+  return `<svg viewBox="0 -4 100 97" class="fig" aria-hidden="true"><line x1="3" y1="91" x2="97" y2="91" class="gnd"/><g${mirror?' transform="translate(100,0) scale(-1,1)"':''}><path class="far" d="M${g(1)} L${g(3)} L${g(4)} M${g(2)} L${g(7)} L${g(8)}"/><path class="body" d="${torso} L${g(0)}"/><path class="near" d="M${g(1)} L${g(5)} L${g(6)} M${g(2)} L${g(9)} L${g(10)}"/><circle cx="${k[0]}" cy="${k[1]}" r="6.3" class="head"/></g></svg>`;
+}
+function scaledSteps(prog){
+  return prog.steps.map(s=>{
+    const flow=!!s.f;let t=s.t;
+    if(!flow&&!s.fixed){t=Math.max(10,Math.round(s.t*settings.dur/5)*5);const br=POSES[s.p].br;if(br){const c=br.reduce((a,b)=>a+b[1],0);t=Math.max(c,Math.round(t/c)*c);}}
+    return Object.assign({},s,{t,flow});
+  });
+}
+function buildSteps(prog){
+  const out=scaledSteps(prog),res=[];
+  out.forEach((s,i)=>{
+    const prevFlow=i>0&&out[i-1].flow&&out[i-1].g===s.g;
+    if(i===0)res.push({trans:true,t:Math.max(settings.trans,8),next:s,first:true});
+    else if(settings.trans>0&&!(s.flow&&prevFlow))res.push({trans:true,t:settings.trans,next:s});
+    res.push(s);
+  });
+  return res;
+}
+const totalSec=steps=>steps.reduce((a,s)=>a+s.t,0);
+
+/* ---------- Voix, sons, écran ---------- */
+const NATIVE=typeof window.AndroidYoga!=='undefined';
+function speak(t){
+  if(!settings.voice||!t)return;
+  try{
+    if(NATIVE){AndroidYoga.speak(t);return;}
+    if('speechSynthesis' in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='fr-FR';u.rate=.95;speechSynthesis.speak(u);}
+  }catch(e){}
+}
+function stopSpeak(){try{if(NATIVE)AndroidYoga.stop();else if(window.speechSynthesis)speechSynthesis.cancel();}catch(e){}}
+let actx=null;
+function tone(f,d,v){
+  if(!settings.beep)return;
+  try{
+    actx=actx||new(window.AudioContext||window.webkitAudioContext)();
+    if(actx.state==='suspended')actx.resume();
+    const o=actx.createOscillator(),gn=actx.createGain(),t0=actx.currentTime;
+    o.type='sine';o.frequency.value=f;
+    gn.gain.setValueAtTime(.0001,t0);gn.gain.exponentialRampToValueAtTime(v,t0+.02);gn.gain.exponentialRampToValueAtTime(.0001,t0+d);
+    o.connect(gn);gn.connect(actx.destination);o.start(t0);o.stop(t0+d+.05);
+  }catch(e){}
+}
+const bell=()=>{tone(528,2.2,.28);setTimeout(()=>tone(792,1.8,.12),90)};
+let wakeLock=null;
+function keepOn(on){
+  try{
+    if(NATIVE){AndroidYoga.keepScreenOn(on);return;}
+    if(on&&navigator.wakeLock)navigator.wakeLock.request('screen').then(l=>wakeLock=l).catch(()=>{});
+    else if(!on&&wakeLock){wakeLock.release();wakeLock=null;}
+  }catch(e){}
+}
+
+/* ---------- Thème ---------- */
+function isDark(){return settings.theme==='dark'||(settings.theme==='auto'&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)}
+function applyTheme(){
+  const r=document.documentElement;
+  if(settings.theme==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',settings.theme);
+  $('#themeBtn').innerHTML=ICON[settings.theme==='auto'?'auto':settings.theme==='dark'?'moon':'sun'];
+  const bg=getComputedStyle(r).getPropertyValue('--bg').trim();
+  try{if(NATIVE)AndroidYoga.setBars(bg,isDark());}catch(e){}
+}
+$('#themeBtn').onclick=()=>{settings.theme={auto:'light',light:'dark',dark:'auto'}[settings.theme];saveSettings();applyTheme()};
+if(window.matchMedia)matchMedia('(prefers-color-scheme: dark)').addEventListener('change',applyTheme);
+
+/* ---------- Historique ---------- */
+const dayKey=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+function getStats(){
+  const h=store.get('yoga_hist',[]);
+  const days=new Set(h.map(x=>x.day));
+  let streak=0;const d=new Date();
+  if(!days.has(dayKey(d)))d.setDate(d.getDate()-1);
+  while(days.has(dayKey(d))){streak++;d.setDate(d.getDate()-1);}
+  return{h,sess:h.length,min:h.reduce((a,x)=>a+x.min,0),streak};
+}
+
+/* ---------- Navigation ---------- */
+let cur='home';
+function show(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id===id));cur=id;window.scrollTo(0,0);}
+
+/* ---------- Accueil ---------- */
+function renderHome(){
+  const now=new Date(),hr=now.getHours();
+  $('#date').textContent=now.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
+  $('#hello').textContent=hr<5||hr>=18?'Bonsoir':'Bonjour';
+  const st=getStats();
+  $('#sSess').textContent=st.sess;$('#sMin').textContent=st.min;$('#sStreak').textContent=st.streak;
+  const sug=progById(hr<11?'reveil':hr>=20?'soir':hr>=12&&hr<14?'bureau':'hatha');
+  const sb=$('#suggest');sb.style.background=sug.col;
+  sb.innerHTML=`<span class="em">${sug.e}</span><span><small>Suggestion du moment</small><b>${sug.n}</b><small>${Math.round(totalSec(buildSteps(sug))/60)} min · ${sug.t}</small></span>`;
+  sb.onclick=()=>openDetail(sug.id);
+  $('#grid').innerHTML=PROGS.map(p=>`<button class="card prog" data-id="${p.id}"><span class="em" style="background:${p.col}22">${p.e}</span><h3>${p.n}</h3><span class="meta">${Math.round(totalSec(buildSteps(p))/60)} min · ${p.t}</span></button>`).join('');
+  document.querySelectorAll('.prog').forEach(b=>b.onclick=()=>openDetail(b.dataset.id));
+  $('#cohCard').onclick=openCoh;
+  $('#breathList').innerHTML=BREATHS.map(p=>`<button class="brow" data-id="${p.id}"><span class="em" style="background:${p.col}26">${p.e}</span><span class="nm">${p.n}<small>${p.t} · ${Math.max(1,Math.round(totalSec(buildSteps(p))/60))} min</small></span><span class="pat">${brPattern(p)}</span></button>`).join('');
+  document.querySelectorAll('.brow').forEach(b=>b.onclick=()=>b.dataset.id==='b_coherence'?openCoh():openDetail(b.dataset.id));
+  const last=st.h.slice(-8).reverse();
+  $('#histWrap').innerHTML=last.length?`<div class="sect">Dernières séances</div><div class="card hist">${last.map(x=>{const p=progById(x.p);const d=new Date(x.ts);return `<div><span>${p?p.e+' '+p.n:x.p}</span><span class="muted">${d.toLocaleDateString('fr-FR',{day:'numeric',month:'short'})} · ${x.min} min</span></div>`}).join('')}</div>`:'';
+}
+
+/* ---------- Détail ---------- */
+let curProg=null;
+const DURS=[[.7,'Courte'],[1,'Normale'],[1.4,'Longue']];
+const TRANS=[[0,'Aucun'],[3,'3 s'],[5,'5 s'],[8,'8 s']];
+function seg(el,list,key,after){
+  const num=typeof list[0][0]==='number';
+  el.innerHTML=list.map(([v,l])=>`<button data-v="${v}" class="${settings[key]===v?'on':''}">${l}</button>`).join('');
+  el.querySelectorAll('button').forEach(b=>b.onclick=()=>{settings[key]=num?parseFloat(b.dataset.v):b.dataset.v;saveSettings();(after||renderDetail)()});
+}
+function openDetail(id){curProg=progById(id);renderDetail();show('detail');}
+function renderDetail(){
+  const p=curProg,all=buildSteps(p),tot=totalSec(all);
+  const hold=scaledSteps(p);
+  $('#hero').style.background=p.col;
+  $('#hero').innerHTML=`<div class="em">${p.e}</div><h1>${p.n}</h1><p>${p.d}</p><div class="chips"><span class="chip">⏱ ${Math.round(tot/60)} min</span><span class="chip">${p.t}</span>${p.breath?(brPattern(p)?`<span class="chip">${brPattern(p)}</span>`:''):`<span class="chip">${hold.filter(s=>!s.flow).length+new Set(hold.filter(s=>s.flow).map(s=>s.g)).size} étapes</span>`}</div>`;
+  $('#durLabel').textContent=p.breath?'Durée de l’exercice':'Durée des postures';
+  $('#durOpt').style.display=p.steps.every(s=>s.fixed)?'none':'';
+  $('#transOpt').style.display=p.breath?'none':'';
+  $('#mudraCard').style.display=p.steps.some(s=>POSES[s.p].mudra)?'':'none';
+  $('#mudraList').innerHTML=MUDRA.map(m=>`<li>${m}</li>`).join('');
+  $('#stepsTitle').textContent='Déroulé';
+  $('#stepsTitle').style.display=$('#steps').style.display=p.breath?'none':'';
+  const bs=p.breath?hold[0]:null,bpo=bs?POSES[bs.p]:null;
+  if(bpo&&bpo.br){
+    const cl=cycleLines(bpo),cd=bpo.br.reduce((a,x)=>a+x[1],0),n=Math.round(bs.t/cd);
+    $('#cycleCard').innerHTML=`<label>L'exercice${bpo.cyc?'':' · un cycle = '+cd+' s'}</label><div class="bb" style="padding-left:0">${breathText(bpo,bs.t)}</div>`;
+    $('#cycleCard').style.display='';
+  }else $('#cycleCard').style.display='none';
+  seg($('#segDur'),DURS,'dur');seg($('#segTrans'),TRANS,'trans');
+  $('#tgVoice').classList.toggle('on',settings.voice);$('#tgBeep').classList.toggle('on',settings.beep);
+  // regroupe les enchaînements consécutifs
+  const rows=[];
+  hold.forEach((s,i)=>{
+    const last=rows[rows.length-1];
+    if(s.flow&&last&&last.flow&&last.g===s.g){last.t+=s.t;if(s.p===hold[0].p){} }
+    else rows.push(Object.assign({},s,{count:1}));
+  });
+  // compte les tours de salutation
+  const rowsHtml=rows.map(s=>{
+    const po=POSES[s.p];
+    if(s.flow){const n=s.g===SA?Math.round(s.t/76):0;return `<div class="st"><span class="mini">${figSVG(po.k)}</span><span class="nm">${s.g}${n>1?' × '+n:''}<small>Enchaînement guidé par le souffle</small></span><span class="t">${fmt(s.t)}</span></div>`}
+    if(po.br)return `<button class="st stb" data-p="${s.p}"><span class="mini">${figSVG(po.k)}</span><span class="nm">${po.n}<small>${po.s}</small></span><div class="bb">${breathText(po,s.t)}</div></button>`;
+    return `<button class="st" data-p="${s.p}" data-s="${s.side||''}"><span class="mini">${figSVG(po.k,s.side==='g')}</span><span class="nm">${po.n}<small>${[sideTxt(s.side),po.s].filter(Boolean).join(' · ')}</small></span><span class="t">${fmt(s.t)}</span></button>`;
+  }).join('');
+  $('#steps').innerHTML=rowsHtml;
+  $('#steps').querySelectorAll('button.st').forEach(b=>b.onclick=()=>poseSheet(b.dataset.p,b.dataset.s));
+}
+$('#tgVoice').onclick=()=>{settings.voice=!settings.voice;saveSettings();renderDetail();if(settings.voice)speak('Guidage vocal activé')};
+$('#tgBeep').onclick=()=>{settings.beep=!settings.beep;saveSettings();renderDetail();tone(660,.15,.2)};
+$('#backBtn').onclick=()=>{renderHome();show('home')};
+$('#goBtn').onclick=()=>startSession(curProg);
+
+/* ---------- Modale ---------- */
+function openModal(html){$('#sheet').innerHTML=html;$('#modal').classList.add('on');}
+function closeModal(){$('#modal').classList.remove('on');}
+$('#modal').onclick=e=>{if(e.target.id==='modal')closeModal()};
+function poseSheet(id,side){
+  const po=POSES[id];
+  openModal(`<div class="figbig">${figSVG(po.k,side==='g')}</div><h2>${po.n}</h2><div class="muted"><i>${po.s}</i></div><ul>${po.c.map(c=>`<li>${c}</li>`).join('')}</ul>${po.mudra?`<b>🖐️ Vishnu mudra</b><ul>${MUDRA.map(c=>`<li>${c}</li>`).join('')}</ul>`:''}<div class="btns"><button class="btn pri" id="mOk">OK</button></div>`);
+  $('#mOk').onclick=closeModal;
+}
+
+/* ---------- Lecteur ---------- */
+let P=null,timer=null;
+$('#plPrev').innerHTML=ICON.prev;$('#plSkip').innerHTML=ICON.next;$('#plX').innerHTML=ICON.x;$('#backBtn').innerHTML=ICON.back;
+
+function startSession(prog){
+  const steps=buildSteps(prog);
+  P={prog,steps,i:0,el:0,total:0,running:true,last:Date.now(),planned:totalSec(steps)};
+  tone(1,.01,.0001); // déverrouille l'audio
+  keepOn(true);show('player');enter(0);
+  clearInterval(timer);timer=setInterval(tick,200);
+}
+function realOf(s){return s.trans?s.next:s}
+function enter(i,silent){
+  P.i=i;P.el=0;P.lastSec=null;P.phase=-1;P.cyc=-1;P.half=false;
+  const s=P.steps[i],r=realOf(s),po=POSES[r.p];
+  const prevTrans=i>0&&P.steps[i-1].trans;
+  // scène
+  if(po.br&&!s.trans){
+    $('#plStage').innerHTML=`<div class="breath"><div class="ring"></div><div class="bc" id="bc"></div><div class="bl" id="bl"></div><div class="bn" id="bn"></div></div>`;
+  }else{
+    $('#plStage').innerHTML=`<div class="figwrap">${figSVG(po.k,r.side==='g')}</div>`;
+  }
+  $('#plTag').textContent=s.trans?(s.first?'Prépare-toi':'Ensuite'):(r.flow?r.g:sideTxt(r.side));
+  $('#plName').textContent=s.trans&&r.flow?r.g:po.n;
+  $('#plSk').textContent=s.trans&&r.flow?'Suis le rythme du souffle':po.s;
+  const cues=$('#plCues');
+  if(r.flow&&!s.trans){cues.className='card pl-cues flow';cues.innerHTML=`<li>${r.n}</li>`;}
+  else if(r.flow){cues.className='card pl-cues flow';cues.innerHTML=`<li>Mets-toi debout en haut du tapis.</li>`;}
+  else if(po.br){
+    cues.className='card pl-cues cyc';
+    cues.innerHTML=`<li class="cyhead">Un cycle</li>`+cycleLines(po).map((l,j)=>`<li class="cy" data-i="${j}"><span>${l[0]}</span><b>${l[1]} s</b></li>`).join('')+
+      `<li class="cyinfo">${po.c.map(c=>`<p>• ${c}</p>`).join('')}${po.mudra?'<p>🖐️ Main droite en Vishnu mudra : pouce = narine droite, annulaire = narine gauche.</p>':''}</li>`;
+  }
+  else{cues.className='card pl-cues';cues.innerHTML=po.c.map(c=>`<li>${c}</li>`).join('');}
+  // suivant
+  let nx=null;for(let j=i+1;j<P.steps.length;j++){if(!P.steps[j].trans){nx=P.steps[j];break;}}
+  if(s.trans)nx=null;
+  $('#plNext').textContent=nx?('Ensuite : '+(nx.flow&&nx.g!==r.g?nx.g:POSES[nx.p].n)+(nx.side?' ('+sideTxt(nx.side).toLowerCase()+')':'')):(s.trans?'':'Dernière étape');
+  // compteur
+  const realIdx=P.steps.slice(0,i+1).filter(x=>!x.trans).length;
+  $('#plCount').textContent=`Étape ${Math.max(1,realIdx)} / ${P.steps.filter(x=>!x.trans).length}`;
+  P.before=P.steps.slice(0,i).reduce((a,x)=>a+x.t,0);
+  renderPlay();update();
+  if(silent)return;
+  // voix
+  const sd=r.side?', '+sideTxt(r.side).toLowerCase():'';
+  if(s.trans){
+    if(r.flow)speak((s.first?'Bienvenue. On commence par : ':'Ensuite : ')+r.g+'. Mets-toi debout en haut du tapis.');
+    else speak((s.first?'Bienvenue. On commence par : ':'Ensuite : ')+po.n+sd+'. '+po.c[0]);
+  }else if(r.flow){speak(r.n);if(!prevTrans||true)tone(600,.12,.12);}
+  else if(po.br){if(!prevTrans)speak(po.n);}
+  else{tone(700,.25,.18);speak(prevTrans?(po.c[1]||'C\'est parti'):po.n+sd+'. '+po.c[0]);}
+}
+function update(){
+  const s=P.steps[P.i],rem=s.t-P.el/1000;
+  $('#plTime').textContent=fmt(Math.ceil(rem));
+  $('#plSBar').style.width=Math.min(100,P.el/10/s.t)+'%';
+  const done=P.before+P.el/1000;
+  $('#plBar').style.width=Math.min(100,done/P.planned*100)+'%';
+  $('#plLeft').textContent=fmt(P.planned-done)+' restantes';
+  if(!s.trans&&POSES[s.p].br)updateBreath(s);
+}
+function updateBreath(s){
+  const po=POSES[s.p],ph=po.br,cyc=ph.reduce((a,p)=>a+p[1],0);
+  const sec=P.el/1000,cn=Math.floor(sec/cyc);let t=sec%cyc,idx=0;
+  while(idx<ph.length-1&&t>=ph[idx][1]){t-=ph[idx][1];idx++;}
+  const bn=$('#bn');if(!bn)return;
+  const p=ph[idx];
+  bn.textContent=p[2]==='pump'?'':Math.ceil(p[1]-t);
+  if(idx!==P.phase||cn!==P.cyc){
+    P.phase=idx;P.cyc=cn;const bc=$('#bc');
+    let label=p[0];
+    if(p[2]==='pump'){let n=0;for(let j=0;j<=idx;j++)if(ph[j][2]==='pump')n++;label=n+' / '+ph.filter(x=>x[2]==='pump').length;}
+    else if(po.count&&p[2]==='out')label=p[0]+' · '+(cn%po.count+1);
+    $('#bl').innerHTML=label+(p[2]==='pump'?'':`<br><small style="font-weight:500;opacity:.8">pendant ${p[1]} secondes</small>`);
+    const hi=po.cyc?p[4]:idx;
+    document.querySelectorAll('#plCues .cy').forEach(e=>e.classList.toggle('on',+e.dataset.i===hi));
+    if(p[2]==='pump'){
+      bc.style.transition='transform .15s ease-out';bc.style.transform='scale(.55)';
+      setTimeout(()=>{if(bc.isConnected){bc.style.transition='transform .6s ease-in';bc.style.transform='scale(.8)';}},180);
+    }else{
+      bc.style.transition=`transform ${p[1]}s ease-in-out`;
+      if(p[2]==='in')bc.style.transform='scale(1)';else if(p[2]==='out')bc.style.transform='scale(.42)';else if(p[2]==='rest')bc.style.transform='scale(.7)';
+    }
+    if(!P.running)return;
+    const say=p[3];
+    if(say===false||p[2]==='pump')tone(520,.06,.1);
+    else breathSound(p[2]);
+    if(typeof say==='string')speak(say);
+    else if(say!==false&&cn<1)speak(p[0].replace(/\s*\(.*?\)/g,'')+', '+p[1]+' secondes');
+  }
+}
+function tick(){
+  if(!P||!P.running)return;
+  const now=Date.now(),dt=now-P.last;P.last=now;P.el+=dt;P.total+=dt;
+  const s=P.steps[P.i],rem=s.t*1000-P.el,sec=Math.ceil(rem/1000);
+  if(sec!==P.lastSec){
+    P.lastSec=sec;
+    if(!s.flow&&s.t>=8&&sec>=1&&sec<=3)tone(sec===1?880:660,.12,.18);
+    if(!s.trans&&!s.flow&&!POSES[s.p].br&&s.t>=50&&!P.half&&sec<=Math.floor(s.t/2)){
+      P.half=true;const po=POSES[s.p];speak(po.c[2]||'Continue de respirer calmement.');
+    }
+  }
+  if(rem<=0){goNext();return;}
+  update();
+}
+function goNext(){if(P.i+1>=P.steps.length)finish();else enter(P.i+1);}
+function skip(){let j=P.i+1;while(j<P.steps.length&&P.steps[j].trans)j++;if(j>=P.steps.length)finish();else enter(j);}
+function prev(){
+  if(P.el>3000&&!P.steps[P.i].trans){enter(P.i,true);return;}
+  let j=P.i-1;while(j>0&&P.steps[j].trans)j--;
+  enter(Math.max(0,j),true);
+}
+function renderPlay(){$('#plPlay').innerHTML=P.running?ICON.pause:ICON.play;}
+function togglePlay(){
+  P.running=!P.running;P.last=Date.now();
+  const bc=$('#bc');
+  if(!P.running){stopSpeak();if(bc){const tr=getComputedStyle(bc).transform;bc.style.transition='none';bc.style.transform=tr;}}
+  else{P.phase=-1;}
+  renderPlay();
+}
+$('#plPlay').onclick=togglePlay;$('#plSkip').onclick=skip;$('#plPrev').onclick=prev;
+function askQuit(){
+  if(P.running)togglePlay();
+  openModal(`<h2>Arrêter la séance ?</h2><p class="muted">Tu as pratiqué ${fmt(P.total/1000)}.</p><div class="btns"><button class="btn" id="mStop">Arrêter</button><button class="btn pri" id="mCont">Continuer</button></div>${P.total>120000?'<div class="btns"><button class="btn" id="mSave">Terminer et enregistrer</button></div>':''}`);
+  $('#mCont').onclick=()=>{closeModal();togglePlay()};
+  $('#mStop').onclick=()=>{closeModal();endSession();renderHome();show('home')};
+  const sv=$('#mSave');if(sv)sv.onclick=()=>{closeModal();finish()};
+}
+$('#plX').onclick=askQuit;
+function endSession(){clearInterval(timer);timer=null;stopSpeak();keepOn(false);}
+function finish(){
+  const min=Math.max(1,Math.round(P.total/60000));
+  endSession();
+  showDone(P.prog,min,false);
+}
+function showDone(prog,min,quiet){
+  const h=store.get('yoga_hist',[]);const now=new Date();
+  h.push({p:prog.id,min,ts:now.getTime(),day:dayKey(now)});store.set('yoga_hist',h);
+  if(!quiet)bell();
+  if(!quiet)setTimeout(()=>speak('Séance terminée. Bravo, et merci pour ta pratique. Namasté.'),400);
+  const st=getStats();
+  $('#doneTxt').textContent=`${prog.e} ${prog.n} · ${min} min`;
+  $('#doneStats').innerHTML=`<div class="card stat"><b>${st.sess}</b><span>séances</span></div><div class="card stat"><b>${st.min}</b><span>minutes</span></div><div class="card stat"><b>${st.streak}</b><span>jours d'affilée</span></div>`;
+  show('done');
+}
+$('#homeBtn').onclick=()=>{renderHome();show('home')};
+
+/* ---------- Cohérence cardiaque (rubrique dédiée) ---------- */
+let C=null;
+function cohTone(ctx,dest,when,inh){
+  const hold=inh==='hold',f=hold?384:inh?432:324,kind=settings.cohSnd,vol=hold?.5:1;
+  const osc=(type,freq,g,dec,att)=>{
+    const o=ctx.createOscillator(),gn=ctx.createGain();
+    o.type=type;o.frequency.setValueAtTime(freq,when);
+    gn.gain.setValueAtTime(.0001,when);gn.gain.exponentialRampToValueAtTime(g*vol,when+att);gn.gain.exponentialRampToValueAtTime(.0001,when+dec);
+    o.connect(gn);gn.connect(dest);o.start(when);o.stop(when+dec+.1);return o;
+  };
+  if(kind==='goutte'){const o=osc('sine',f*2,.24,.9,.008);o.frequency.exponentialRampToValueAtTime(f*1.5,when+.08);}
+  else if(kind==='carillon'){osc('triangle',f*2,.12,2.6,.005);osc('sine',f*3,.05,1.8,.005);}
+  else{osc('sine',f,.3,3.8,.06);osc('sine',f*2.76,.05,2.2,.06);}
+}
+function breathSound(type){
+  if(!settings.beep)return;
+  try{actx=actx||new(window.AudioContext||window.webkitAudioContext)();if(actx.state==='suspended')actx.resume();
+    cohTone(actx,actx.destination,actx.currentTime+.02,type==='in'?true:type==='out'?false:'hold');}catch(e){}
+}
+function previewSnd(){
+  try{actx=actx||new(window.AudioContext||window.webkitAudioContext)();if(actx.state==='suspended')actx.resume();
+    cohTone(actx,actx.destination,actx.currentTime+.05,true);cohTone(actx,actx.destination,actx.currentTime+1.3,false);}catch(e){}
+}
+function openCoh(){renderCohSetup();$('#cohSetup').style.display='';$('#cohRun').style.display='none';show('coh');}
+function renderCohSetup(){
+  seg($('#cohDur'),[[3,'3 min'],[5,'5 min'],[10,'10 min'],[15,'15 min']],'cohMin',renderCohSetup);
+  seg($('#cohRyt'),[['5-5','5 s / 5 s'],['4-6','4 s / 6 s']],'cohR',renderCohSetup);
+  seg($('#cohSnd'),[['bol','Bol'],['goutte','Goutte'],['carillon','Carillon']],'cohSnd',()=>{renderCohSetup();previewSnd()});
+}
+function cohStart(){
+  const [ti,te]=settings.cohR==='4-6'?[4,6]:[5,5],cyc=ti+te;
+  const ctx=new(window.AudioContext||window.webkitAudioContext)();
+  const master=ctx.createGain();master.connect(ctx.destination);
+  C={ctx,master,ti,te,cyc,t0:ctx.currentTime+5,total:Math.round(settings.cohMin*60/cyc)*cyc,next:0,phase:-1,running:true,raf:0};
+  $('#cohSetup').style.display='none';$('#cohRun').style.display='';
+  keepOn(true);renderCohPlay();
+  stopSpeak();
+  C.raf=requestAnimationFrame(cohFrame);
+}
+function cohSchedule(){
+  for(;;){
+    const k=C.next,when=C.t0+Math.floor(k/2)*C.cyc+(k%2?C.ti:0);
+    if(when>=C.t0+C.total||when>C.ctx.currentTime+4)break;
+    cohTone(C.ctx,C.master,when,k%2===0);C.next++;
+  }
+}
+function cohFrame(){
+  if(!C)return;
+  if(C.running){
+    cohSchedule();
+    const el=C.ctx.currentTime-C.t0,bc=$('#cohBc');
+    if(el<0){
+      $('#cohBl').innerHTML='Prépare-toi<br><small style="font-weight:500;opacity:.8">au premier son : inspire</small>';$('#cohBn').textContent=Math.ceil(-el);
+      bc.style.transform='scale(.42)';$('#cohLeft').textContent=fmt(C.total);
+    }else if(el>=C.total){cohEnd(true);return;}
+    else{
+      const t=el%C.cyc,inh=t<C.ti,pr=inh?t/C.ti:(t-C.ti)/C.te,e=.5-.5*Math.cos(Math.PI*pr);
+      bc.style.transform=`scale(${inh?.42+.58*e:1-.58*e})`;
+      const ph=Math.floor(el/C.cyc)*2+(inh?0:1);
+      if(ph!==C.phase){C.phase=ph;$('#cohBl').innerHTML=(inh?'Inspire':'Expire')+`<br><small style="font-weight:500;opacity:.8">pendant ${inh?C.ti:C.te} secondes</small>`;}
+      $('#cohBn').textContent=Math.ceil(inh?C.ti-t:C.cyc-t);
+      $('#cohLeft').textContent=fmt(C.total-el);
+      $('#cohBar').style.width=(el/C.total*100)+'%';
+    }
+  }
+  C.raf=requestAnimationFrame(cohFrame);
+}
+function renderCohPlay(){$('#cohPlay').innerHTML=C&&!C.running?ICON.play:ICON.pause;}
+function cohToggle(){
+  if(!C)return;C.running=!C.running;
+  try{if(C.running)C.ctx.resume();else{C.ctx.suspend();stopSpeak();}}catch(e){}
+  renderCohPlay();
+}
+function cohEnd(done){
+  const ctx=C.ctx,master=C.master,el=Math.max(0,ctx.currentTime-C.t0);
+  cancelAnimationFrame(C.raf);C=null;keepOn(false);stopSpeak();
+  if(done){cohTone(ctx,master,ctx.currentTime+.05,true);cohTone(ctx,master,ctx.currentTime+.6,false);setTimeout(()=>{try{ctx.close()}catch(e){}},4500);}
+  else{try{ctx.close()}catch(e){}}
+  const min=Math.round(el/60);
+  if(done||min>=1)showDone(COH,Math.max(1,min),true);else{renderHome();show('home');}
+}
+$('#cohGo').onclick=cohStart;$('#cohPlay').onclick=cohToggle;
+$('#cohStop').onclick=()=>{if(C)cohEnd(false)};
+$('#cohX').onclick=()=>{if(C)cohEnd(false);else{renderHome();show('home')}};
+$('#cohStop').innerHTML=ICON.stop;$('#cohX').innerHTML=ICON.back;
+
+/* ---------- Bouton retour Android ---------- */
+window.onAndroidBack=function(){
+  if($('#modal').classList.contains('on')){if(cur==='player'&&P&&!P.running&&$('#mCont')){$('#mCont').click();}else closeModal();return true;}
+  if(cur==='player'){askQuit();return true;}
+  if(cur==='coh'){$('#cohX').click();return true;}
+  if(cur==='detail'||cur==='done'){renderHome();show('home');return true;}
+  return false;
+};
+
+applyTheme();renderHome();
+</script>
+</body>
+</html>
